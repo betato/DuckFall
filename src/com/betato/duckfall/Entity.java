@@ -18,21 +18,23 @@ public class Entity {
 	private BufferedImage texture;
 	
 	public Entity(BufferedImage texture, int width, int height) {
-		
-		this.width = width;
-		this.height = height;
-		
 		// Scale image only if necessary
-		if (height == 0 || width == 0 || width == texture.getWidth() 
+		if (height <= 1 || width <= 1 || width == texture.getWidth() 
 				&& height == texture.getHeight()) {
-			this.texture = scaleImage(texture, width, height);
-		} else {
 			this.texture = texture;
+			// Set width and height to image dimensions
+			this.width = texture.getWidth();
+			this.height = texture.getHeight();
+		} else {
+			this.texture = scaleImage(texture, width, height);
+			// Set width and height to specified dimensions
+			this.width = width;
+			this.height = height;
 		}
 		
 		// Record all transparent points
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
+		for (int i = 0; i < this.width; i++) {
+			for (int j = 0; j < this.height; j++) {
 				if (isPixelOpaque(this.texture, i, j)){
 					collisionPoints.add(new Point(i, j));
 				}
@@ -62,6 +64,11 @@ public class Entity {
 		return bilinearScaleOp.filter(image, new BufferedImage(width, height, image.getType()));
 	}
 
+	public void setPos(Point p) {
+		x = p.x;
+		y = p.y;
+	}
+	
 	public boolean isCollidingWith(Entity collidingEntity){
 		// Check collision with axis-aligned bounding box first
 		if (collidingEntity.x < x + width &&
@@ -69,13 +76,17 @@ public class Entity {
 				collidingEntity.y < y + height &&
 				collidingEntity.height + collidingEntity.y > y) {
 			// Outer boxes are colliding, check individual points
+			int xApart = x - collidingEntity.x;
+			int yApart = y - collidingEntity.y;
 			int collisionPointSize1 = collisionPoints.size();
 			int collisionPointSize2 = collidingEntity.collisionPoints.size();
 			for (int i = 0; i < collisionPointSize1; i++) {
 				for (int j = 0; j < collisionPointSize2; j++) {
 					// Check if any point is touching any other point
-					if (collisionPoints.get(i).equals(
-							collidingEntity.collisionPoints.get(j))){
+					if (collisionPoints.get(i).x + xApart == 
+							collidingEntity.collisionPoints.get(j).x &&
+							collisionPoints.get(i).y + yApart == 
+							collidingEntity.collisionPoints.get(j).y){
 						return true;
 					}
 				}
