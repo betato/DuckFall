@@ -10,7 +10,7 @@ import com.betato.gamedisplay.MouseStates;
 public class Game extends GameWindow {
 
 	public Game() {
-		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false);
+		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false, true);
 	}
 
 	@Override

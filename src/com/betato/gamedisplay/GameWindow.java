@@ -1,10 +1,12 @@
 package com.betato.gamedisplay;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
@@ -15,6 +17,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,7 +32,7 @@ public abstract class GameWindow extends GameLoop {
 	private MouseStates mouse = new MouseStates();
 	private boolean resized;
 
-	public void init(int fps, int ups, String title, Dimension size, boolean resizable, boolean fullscreen) {
+	public void init(int fps, int ups, String title, Dimension size, boolean resizable, boolean fullscreen, boolean hideCursor) {
 		set(fps, ups);
 		window = new JFrame(title);
 		display = new JPanel() {
@@ -49,6 +52,16 @@ public abstract class GameWindow extends GameLoop {
 		} else {
 			window.setSize(size);
 		}
+		
+		if (hideCursor) {
+			// Create blank cursor
+			BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+			Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+				cursorImg, new Point(0, 0), "blank cursor");
+			// Set cursor
+			window.getContentPane().setCursor(blankCursor);
+		}
+		
 		setResizable(resizable);
 		initListeners();
 		window.setVisible(true);
