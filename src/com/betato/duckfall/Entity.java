@@ -33,6 +33,7 @@ public class Entity {
 		// Record all transparent points
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
+				if (isPixelOpaque(this.texture, i, j)){
 					collisionPoints.add(new Point(i, j));
 				}
 			}
@@ -59,6 +60,28 @@ public class Entity {
 		AffineTransform scaleTransform = AffineTransform.getScaleInstance(scaleX, scaleY);
 		AffineTransformOp bilinearScaleOp = new AffineTransformOp(scaleTransform, AffineTransformOp.TYPE_BILINEAR);
 		return bilinearScaleOp.filter(image, new BufferedImage(width, height, image.getType()));
+	}
+
+	public boolean isCollidingWith(Entity collidingEntity){
+		// Check collision with axis-aligned bounding box first
+		if (collidingEntity.x < x + width &&
+				collidingEntity.x + collidingEntity.width > x &&
+				collidingEntity.y < y + height &&
+				collidingEntity.height + collidingEntity.y > y) {
+			// Outer boxes are colliding, check individual points
+			int collisionPointSize1 = collisionPoints.size();
+			int collisionPointSize2 = collidingEntity.collisionPoints.size();
+			for (int i = 0; i < collisionPointSize1; i++) {
+				for (int j = 0; j < collisionPointSize2; j++) {
+					// Check if any point is touching any other point
+					if (collisionPoints.get(i).equals(
+							collidingEntity.collisionPoints.get(j))){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	public void draw(Graphics g) {
