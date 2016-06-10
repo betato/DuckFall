@@ -54,12 +54,8 @@ public abstract class GameWindow extends GameLoop {
 		}
 		
 		if (hideCursor) {
-			// Create blank cursor
-			BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-			Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
-				cursorImg, new Point(0, 0), "blank cursor");
-			// Set cursor
-			window.getContentPane().setCursor(blankCursor);
+			// Set cursor only if needed
+			setCursorVisibility(hideCursor);
 		}
 		
 		setResizable(resizable);
@@ -67,7 +63,22 @@ public abstract class GameWindow extends GameLoop {
 		window.setVisible(true);
 		run();
 	}
-
+	
+	public void setCursorVisibility(boolean hideCursor){
+		if (hideCursor) {
+			// Init transparent cursor image.
+			BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+			// Create a new blank cursor.
+			Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+			    cursorImg, new Point(0, 0), "blank cursor");
+			// Set the cursor
+			window.getContentPane().setCursor(blankCursor);
+		} else {
+			// Set default cursor
+			window.getContentPane().setCursor(Cursor.getDefaultCursor());
+		}
+	}
+	
 	public void setFullscreen(boolean fullscreen) {
 		window.dispose();
 		window.setUndecorated(fullscreen);
