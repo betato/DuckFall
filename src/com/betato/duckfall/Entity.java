@@ -8,7 +8,20 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Entity {
-	public Entity(BufferedImage texture, int height, int width) {
+
+	public int x;
+	public int y;
+	public int height;
+	public int width;
+	public ArrayList<Point> collisionPoints = new ArrayList<Point>();
+
+	private BufferedImage texture;
+	
+	public Entity(BufferedImage texture, int width, int height) {
+		
+		this.width = width;
+		this.height = height;
+		
 		// Scale image only if necessary
 		if (height == 0 || width == 0 || width == texture.getWidth() 
 				&& height == texture.getHeight()) {
@@ -17,10 +30,24 @@ public class Entity {
 			this.texture = texture;
 		}
 		
-		this.width = width;
-		this.height = height;
+		// Record all transparent points
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+					collisionPoints.add(new Point(i, j));
+				}
+			}
+		}
 	}
-
+	
+	private boolean isPixelOpaque(BufferedImage image, int x, int y) {
+		int pixel = image.getRGB(x, y);
+		// Check alpha value
+		if ((pixel >> 24) == 0x00) {
+			return false;
+		}
+		return true;
+	}
+	
 	private BufferedImage scaleImage(BufferedImage image, int width, int height) {
 		// Get dimensions
 		int imageWidth = image.getWidth();
@@ -33,14 +60,6 @@ public class Entity {
 		AffineTransformOp bilinearScaleOp = new AffineTransformOp(scaleTransform, AffineTransformOp.TYPE_BILINEAR);
 		return bilinearScaleOp.filter(image, new BufferedImage(width, height, image.getType()));
 	}
-
-	public int x;
-	public int y;
-	public int height;
-	public int width;
-	public ArrayList<ArrayList<Point>> collisionPoints = new ArrayList<ArrayList<Point>>();
-
-	private BufferedImage texture;
 
 	public void draw(Graphics g) {
 		// Draw texture with x and y as center point
