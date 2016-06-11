@@ -13,10 +13,14 @@ public class Entity {
 	public int y;
 	public int height;
 	public int width;
+	public int halfHeight;
+	public int halfWidth;	
 	
-	public int xVelocity;
-	public int yVelocity;
-	
+	public double xVelocity;
+	public double yVelocity;
+	public double xStep;
+	public double yStep;
+		
 	public ArrayList<Point> collisionPoints = new ArrayList<Point>();
 
 	private BufferedImage texture;
@@ -44,6 +48,9 @@ public class Entity {
 				}
 			}
 		}
+		
+		halfWidth = width / 2;
+		halfHeight = height / 2;
 	}
 	
 	private boolean isPixelOpaque(BufferedImage image, int x, int y) {
@@ -73,23 +80,42 @@ public class Entity {
 		y = p.y;
 	}
 	
+	public void setVelocity(double xVelocity, double yVelocity) {
+		this.xVelocity = xVelocity;
+		this.yVelocity = yVelocity;
+	}
+	
 	public Point getPos() {
 		return new Point(x, y);
 	}
 	
 	public void incrementPos(Point p) {
-		x =+ p.x;
-		y =+ p.y;
+		x += p.x;
+		y += p.y;
 	}
 	
 	public void incrementPos(int x, int y) {
-		this.x =+ x;
-		this.y =+ y;
+		this.x += x;
+		this.y += y;
 	}
 	
 	public void stepPos(){
-		this.x =+ xVelocity;
-		this.y =+ yVelocity;
+		xStep += xVelocity;
+		yStep += yVelocity;
+		
+		if (xStep >= 1){
+			x += xStep;
+			xStep = 0;
+		}
+		if (yStep >= 1){
+			y += yStep;
+			yStep = 0;
+		}
+	}
+	
+	public void setPos(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 	public boolean isCollidingWith(Entity collidingEntity){
@@ -120,6 +146,6 @@ public class Entity {
 
 	public void draw(Graphics g) {
 		// Draw texture with x and y as center point
-		g.drawImage(texture, x - width / 2, y - height / 2, null);
+		g.drawImage(texture, x - halfWidth, y - halfHeight, null);
 	}
 }
