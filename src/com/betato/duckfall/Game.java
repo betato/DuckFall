@@ -23,6 +23,8 @@ public class Game extends GameWindow {
 	private int screenWidth;
 	public static final int MAX_DUCK_SPEED = 20;
 	
+	private BufferedImage background;
+	
 	private String[] bagImages = {"whitebag.png", "bluebag.png", "yellowbag.png"};
 	
 	TextureLoader loader;
@@ -31,6 +33,7 @@ public class Game extends GameWindow {
 	public Game() {
 		loader = new TextureLoader();
 		highScoreServer = new HighScoreServer();
+		background = loader.getTexture("background.png");
 		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false, true);
 	}
 
@@ -116,6 +119,8 @@ public class Game extends GameWindow {
 		// Clear background
 		g.setColor(Color.white);
 		g.fillRect(0, 0, screenWidth, screenHeight);
+		//draw the background image. The position has to be at negative two, or else, there's a white border for some reason
+		g.drawImage(background, -2, -2, null);
 		// Draw duck and bags
 		duck.draw(g);
 		for (Entity bag : bags){
