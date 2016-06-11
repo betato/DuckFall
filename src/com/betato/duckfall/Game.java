@@ -3,13 +3,8 @@ package com.betato.duckfall;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
 
 import com.betato.gamedisplay.GameWindow;
 import com.betato.gamedisplay.KeyStates;
@@ -19,40 +14,29 @@ public class Game extends GameWindow {
 
 	private Entity duck;
 	private ArrayList<Entity> bags = new ArrayList<Entity>();
-<<<<<<< HEAD
 	Random bagRand = new Random();
-	public static final int SCREEN_WIDTH = 720;
-	public static final int SCREEN_HEIGHT = 540;
+	public static final int WINDOW_WIDTH = 720;
+	public static final int WINDOW_HEIGHT = 540;
+	private int screenHeight;
+	private int screenWidth;
+	public static final int MAX_DUCK_SPEED = 20;
 	
-	public Game() {
-		init(60, 120, "Duck Thing", new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT), false, false, true);
-=======
 	TextureLoader loader;
 	
 	public Game() {
 		loader = new TextureLoader();
 		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false, true);
->>>>>>> origin/master
 	}
 
 	@Override
 	public void onInit() {
-<<<<<<< HEAD
 		// Debug images
-		BufferedImage texture = null;
-		try {
-			texture = ImageIO.read(new File("test.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		duck = new Entity(texture, 0, 0);
-		bags.add(new Entity(texture, 0, 0));
-		bags.get(0).setVelocity(1.1, 1.1);
-=======
+		screenHeight = getContentSize().height;
+		screenWidth = getContentSize().width;
 		duck = new Entity(loader.getTexture("moneyduck.png"), 64, 64);
 		bags.add(new Entity(loader.getTexture("whiteduck.png"), 64, 64));
+		bags.get(0).setVelocity(1.1, 1.1);
 		bags.get(0).incrementPos(100, 150);
->>>>>>> origin/master
 	}
 
 	@Override
@@ -62,9 +46,28 @@ public class Game extends GameWindow {
 
 	@Override
 	public void onUpdate(KeyStates keys, MouseStates mouse, boolean resized) {
-		// Follow mouse with duck
 		updateBags();
-		duck.setPos(mouse.pos);
+		
+		// Follow mouse with duck
+		int diffX = mouse.pos.x - duck.x;
+		int diffY = mouse.pos.y - duck.y;
+		int deltaX;
+		int deltaY;
+		
+		// Duck speed limits
+		deltaX = Math.min(diffX, 20);
+		deltaX = Math.max(deltaX, -20);
+		deltaY = Math.min(diffY, 20);
+		deltaY = Math.max(deltaY, -20);
+		
+		// Duck screen boundaries
+		deltaX = Math.min(deltaX, screenWidth - duck.x);
+		deltaX = Math.max(deltaX, 0 - duck.x);
+		deltaY = Math.min(deltaY, screenHeight - duck.y);
+		deltaY = Math.max(deltaY, 0 - duck.y);
+		
+		duck.incrementPos(deltaX, deltaY);
+		
 		// Check collisions
 		for (Entity bag : bags){   
 			if (bag.isCollidingWith(duck)){
@@ -80,9 +83,9 @@ public class Game extends GameWindow {
 		// Remove bags that have left the screen
 		for (int i = bags.size() - 1; i >= 0; i--){ // from 9 to 0
 			if (bags.get(i).x < 0 ||
-					bags.get(i).x - bags.get(i).halfWidth > SCREEN_WIDTH ||
+					bags.get(i).x - bags.get(i).halfWidth > screenWidth ||
 					bags.get(i).y + bags.get(i).halfHeight < 0 ||
-					bags.get(i).y - bags.get(i).halfHeight > SCREEN_HEIGHT){
+					bags.get(i).y - bags.get(i).halfHeight > screenHeight){
 				bags.remove(i);
 			}
 		}
@@ -92,7 +95,7 @@ public class Game extends GameWindow {
 	public void onRender(Graphics g) {
 		// Clear background
 		g.setColor(Color.white);
-		g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+		g.fillRect(0, 0, screenWidth, screenHeight);
 		// Draw duck and bags
 		duck.draw(g);
 		for (Entity bag : bags){
