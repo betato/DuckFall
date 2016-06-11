@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import com.betato.gamedisplay.GameWindow;
@@ -22,9 +23,14 @@ public class Game extends GameWindow {
 	public static final int MAX_DUCK_SPEED = 20;
 	
 	TextureLoader loader;
+	HighScoreServer highScoreServer;
 	
 	public Game() {
 		loader = new TextureLoader();
+		highScoreServer = new HighScoreServer();
+		//high score server test
+		highScoreServer.submitScore("James Bond", 007);
+		System.out.println(highScoreServer.getScores(5).toString());
 		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false, true);
 	}
 
