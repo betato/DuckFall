@@ -3,6 +3,7 @@ package com.betato.duckfall;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -21,6 +22,8 @@ public class Game extends GameWindow {
 	private int screenHeight;
 	private int screenWidth;
 	public static final int MAX_DUCK_SPEED = 20;
+	
+	private String[] bagImages = {"whitebag.png", "bluebag.png", "yellowbag.png"};
 	
 	TextureLoader loader;
 	HighScoreServer highScoreServer;
@@ -83,7 +86,7 @@ public class Game extends GameWindow {
 	private void generateBags() {
 		if (bagRand.nextInt(40) == 0) {
 			int i = bagRand.nextInt(64) + 32;
-			bags.add(new Entity(loader.getTexture("moneyduck.png"), i, i, bagRand.nextInt(screenWidth),
+			bags.add(new Entity(getRandomBagImage(), i, i, bagRand.nextInt(screenWidth),
 					-31, randomDouble(-0.4, 0.4), randomDouble(0.6, 3)));
 		}
 	}
@@ -105,6 +108,10 @@ public class Game extends GameWindow {
 				bags.remove(i);
 			}
 		}
+	}
+	
+	private BufferedImage getRandomBagImage() {
+		return loader.getTexture(bagImages[bagRand.nextInt(bagImages.length)]);
 	}
 
 	@Override
