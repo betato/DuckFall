@@ -23,7 +23,7 @@ public class TextureLoader {
 	}
 
 	private BufferedImage loadTexture(String name) {
-		URL path = this.getClass().getClassLoader().getResource("/resource/texture/" + name);
+		URL path = this.getClass().getClassLoader().getResource("resource/texture/" + name);
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(path);
