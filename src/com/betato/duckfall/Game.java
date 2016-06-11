@@ -19,16 +19,25 @@ public class Game extends GameWindow {
 
 	private Entity duck;
 	private ArrayList<Entity> bags = new ArrayList<Entity>();
+<<<<<<< HEAD
 	Random bagRand = new Random();
 	public static final int SCREEN_WIDTH = 720;
 	public static final int SCREEN_HEIGHT = 540;
 	
 	public Game() {
 		init(60, 120, "Duck Thing", new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT), false, false, true);
+=======
+	TextureLoader loader;
+	
+	public Game() {
+		loader = new TextureLoader();
+		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false, true);
+>>>>>>> origin/master
 	}
 
 	@Override
 	public void onInit() {
+<<<<<<< HEAD
 		// Debug images
 		BufferedImage texture = null;
 		try {
@@ -39,6 +48,11 @@ public class Game extends GameWindow {
 		duck = new Entity(texture, 0, 0);
 		bags.add(new Entity(texture, 0, 0));
 		bags.get(0).setVelocity(1.1, 1.1);
+=======
+		duck = new Entity(loader.getTexture("moneyduck.png"), 64, 64);
+		bags.add(new Entity(loader.getTexture("whiteduck.png"), 64, 64));
+		bags.get(0).incrementPos(100, 150);
+>>>>>>> origin/master
 	}
 
 	@Override
