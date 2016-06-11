@@ -31,9 +31,6 @@ public class Game extends GameWindow {
 	public Game() {
 		loader = new TextureLoader();
 		highScoreServer = new HighScoreServer();
-		//high score server test
-		highScoreServer.submitScore("James Bond", 007);
-		System.out.println(highScoreServer.getScores(5).toString());
 		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false, true);
 	}
 
