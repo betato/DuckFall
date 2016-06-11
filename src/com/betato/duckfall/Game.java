@@ -36,13 +36,9 @@ public class Game extends GameWindow {
 
 	@Override
 	public void onInit() {
-		// Debug images
 		screenHeight = getContentSize().height;
 		screenWidth = getContentSize().width;
 		duck = new Entity(loader.getTexture("moneyduck.png"), 64, 64);
-		bags.add(new Entity(loader.getTexture("whiteduck.png"), 64, 64));
-		bags.get(0).setVelocity(1.1, 1.1);
-		bags.get(0).incrementPos(100, 150);
 	}
 
 	@Override
@@ -55,7 +51,7 @@ public class Game extends GameWindow {
 		generateBags();
 		updateBags();
 		updateDuck(mouse.pos.x - duck.x, mouse.pos.y - duck.y);
-		
+
 		// Check collisions
 		for (Entity bag : bags){   
 			if (bag.isCollidingWith(duck)){
@@ -76,17 +72,18 @@ public class Game extends GameWindow {
 		deltaY = Math.max(deltaY, -20);
 		
 		// Duck screen boundaries
-		deltaX = Math.min(deltaX, screenWidth - duck.x);
-		deltaX = Math.max(deltaX, 0 - duck.x);
-		deltaY = Math.min(deltaY, screenHeight - duck.y);
-		deltaY = Math.max(deltaY, 0 - duck.y);
+		deltaX = Math.min(deltaX, screenWidth - duck.x - duck.halfWidth);
+		deltaX = Math.max(deltaX, 0 - duck.x - duck.halfWidth);
+		deltaY = Math.min(deltaY, screenHeight - duck.y - duck.halfHeight);
+		deltaY = Math.max(deltaY, 0 - duck.y - duck.halfHeight);
 		
 		duck.incrementPos(deltaX, deltaY);
 	}
 
 	private void generateBags() {
 		if (bagRand.nextInt(40) == 0) {
-			bags.add(new Entity(loader.getTexture("moneyduck.png"), 64, 64, bagRand.nextInt(screenWidth),
+			int i = bagRand.nextInt(64) + 32;
+			bags.add(new Entity(loader.getTexture("moneyduck.png"), i, i, bagRand.nextInt(screenWidth),
 					-31, randomDouble(-0.4, 0.4), randomDouble(0.6, 3)));
 		}
 	}

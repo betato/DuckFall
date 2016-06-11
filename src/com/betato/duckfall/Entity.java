@@ -14,7 +14,7 @@ public class Entity {
 	public int height;
 	public int width;
 	public int halfHeight;
-	public int halfWidth;	
+	public int halfWidth;
 	
 	public double xVelocity;
 	public double yVelocity;
@@ -156,28 +156,32 @@ public class Entity {
 	
 	public boolean isCollidingWith(Entity collidingEntity){
 		// Check collision with axis-aligned bounding box first
-		if (AABBColliding(collidingEntity)) {
-			// Outer boxes are colliding, check individual points
-			int xApart = x - collidingEntity.x;
-			int yApart = y - collidingEntity.y;
-			int collisionPointSize1 = collisionPoints.size();
-			int collisionPointSize2 = collidingEntity.collisionPoints.size();
-			for (int i = 0; i < collisionPointSize1; i++) {
-				for (int j = 0; j < collisionPointSize2; j++) {
-					// Check if any point is touching any other point
-					if (collisionPoints.get(i).x + xApart == 
-							collidingEntity.collisionPoints.get(j).x &&
-							collisionPoints.get(i).y + yApart == 
-							collidingEntity.collisionPoints.get(j).y){
-						return true;
-					}
+		if (collidingAABB(collidingEntity)) {
+			// If outer boxes are colliding, check individual points
+			return collidingAbstract(collidingEntity);
+		}
+		return false;
+	}
+
+	public boolean collidingAbstract (Entity collidingEntity) {
+		int xApart = x - collidingEntity.x;
+		int yApart = y - collidingEntity.y;
+		int collisionPointSize1 = collisionPoints.size();
+		int collisionPointSize2 = collidingEntity.collisionPoints.size();
+		
+		for (int i = 0; i < collisionPointSize1; i++) {
+			for (int j = 0; j < collisionPointSize2; j++) {
+				// Check if any point is touching any other point
+				if (collisionPoints.get(i).x + xApart == collidingEntity.collisionPoints.get(j).x &&
+						collisionPoints.get(i).y + yApart == collidingEntity.collisionPoints.get(j).y){
+					return true;
 				}
 			}
 		}
 		return false;
 	}
 
-	public boolean AABBColliding (Entity collidingEntity) {
+	public boolean collidingAABB (Entity collidingEntity) {
 		// Check if outer bounds are intersecting
 		return collidingEntity.x < x + width &&
 				collidingEntity.x + collidingEntity.width > x &&
@@ -187,6 +191,6 @@ public class Entity {
 
 	public void draw(Graphics g) {
 		// Draw texture with x and y as center point
-		g.drawImage(texture, x - halfWidth, y - halfHeight, null);
+		g.drawImage(texture, x, y, null);
 	}
 }
