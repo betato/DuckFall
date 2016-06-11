@@ -18,22 +18,17 @@ public class Game extends GameWindow {
 
 	private Entity duck;
 	private ArrayList<Entity> bags = new ArrayList<Entity>();
+	TextureLoader loader;
 	
 	public Game() {
+		loader = new TextureLoader();
 		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false, true);
 	}
 
 	@Override
 	public void onInit() {
-		// Debug images
-		BufferedImage texture = null;
-		try {
-			texture = ImageIO.read(new File("test.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		duck = new Entity(texture, 0, 0);
-		bags.add(new Entity(texture, 0, 0));
+		duck = new Entity(loader.getTexture("moneyduck.png"), 64, 64);
+		bags.add(new Entity(loader.getTexture("whiteduck.png"), 64, 64));
 		bags.get(0).incrementPos(100, 150);
 	}
 
