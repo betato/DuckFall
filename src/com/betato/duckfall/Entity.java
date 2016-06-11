@@ -25,7 +25,47 @@ public class Entity {
 
 	private BufferedImage texture;
 	
+	public Entity(BufferedImage texture) {
+		// Do not scale image
+		this.texture = texture;
+		this.width = texture.getWidth();
+		this.height = texture.getHeight();
+
+		// Record all transparent points
+		getCollisionPoints();
+		
+		// Set global variables
+		halfWidth = width / 2;
+		halfHeight = height / 2;
+	}
+	
 	public Entity(BufferedImage texture, int width, int height) {
+		// Scale image only if necessary
+		tryScaleImage(texture, width, height);
+
+		// Record all transparent points
+		getCollisionPoints();
+		
+		// Set global variables
+		halfWidth = width / 2;
+		halfHeight = height / 2;
+	}
+	
+	public Entity(BufferedImage texture, int width, int height, int xVelocity, int yVelocity) {
+		// Scale image only if necessary
+		tryScaleImage(texture, width, height);
+
+		// Record all transparent points
+		getCollisionPoints();
+		
+		// Set global variables
+		halfWidth = width / 2;
+		halfHeight = height / 2;
+		this.xVelocity = xVelocity;
+		this.yVelocity = yVelocity;
+	}
+	
+	private void tryScaleImage(BufferedImage texture, int width, int height) {
 		// Scale image only if necessary
 		if (height <= 1 || width <= 1 || width == texture.getWidth() 
 				&& height == texture.getHeight()) {
@@ -39,7 +79,9 @@ public class Entity {
 			this.width = width;
 			this.height = height;
 		}
-		
+	}
+	
+	private void getCollisionPoints() {
 		// Record all transparent points
 		for (int i = 0; i < this.width; i++) {
 			for (int j = 0; j < this.height; j++) {
@@ -48,9 +90,6 @@ public class Entity {
 				}
 			}
 		}
-		
-		halfWidth = width / 2;
-		halfHeight = height / 2;
 	}
 	
 	private boolean isPixelOpaque(BufferedImage image, int x, int y) {
@@ -74,24 +113,10 @@ public class Entity {
 		AffineTransformOp bilinearScaleOp = new AffineTransformOp(scaleTransform, AffineTransformOp.TYPE_BILINEAR);
 		return bilinearScaleOp.filter(image, new BufferedImage(width, height, image.getType()));
 	}
-
-	public void setPos(Point p) {
-		x = p.x;
-		y = p.y;
-	}
 	
 	public void setVelocity(double xVelocity, double yVelocity) {
 		this.xVelocity = xVelocity;
 		this.yVelocity = yVelocity;
-	}
-	
-	public Point getPos() {
-		return new Point(x, y);
-	}
-	
-	public void incrementPos(Point p) {
-		x += p.x;
-		y += p.y;
 	}
 	
 	public void incrementPos(int x, int y) {
@@ -113,17 +138,9 @@ public class Entity {
 		}
 	}
 	
-	public void setPos(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-	
 	public boolean isCollidingWith(Entity collidingEntity){
 		// Check collision with axis-aligned bounding box first
-		if (collidingEntity.x < x + width &&
-				collidingEntity.x + collidingEntity.width > x &&
-				collidingEntity.y < y + height &&
-				collidingEntity.height + collidingEntity.y > y) {
+		if (AABBColliding(collidingEntity)) {
 			// Outer boxes are colliding, check individual points
 			int xApart = x - collidingEntity.x;
 			int yApart = y - collidingEntity.y;
@@ -142,6 +159,14 @@ public class Entity {
 			}
 		}
 		return false;
+	}
+
+	public boolean AABBColliding (Entity collidingEntity) {
+		// Check if outer bounds are intersecting
+		return collidingEntity.x < x + width &&
+				collidingEntity.x + collidingEntity.width > x &&
+				collidingEntity.y < y + height &&
+				collidingEntity.height + collidingEntity.y > y;
 	}
 
 	public void draw(Graphics g) {
