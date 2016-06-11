@@ -46,11 +46,20 @@ public class Game extends GameWindow {
 
 	@Override
 	public void onUpdate(KeyStates keys, MouseStates mouse, boolean resized) {
+		generateBags();
 		updateBags();
+		updateDuck(mouse.pos.x - duck.x, mouse.pos.y - duck.y);
 		
+		// Check collisions
+		for (Entity bag : bags){   
+			if (bag.isCollidingWith(duck)){
+				System.out.println("eh");
+			}
+		}
+	}
+
+	private void updateDuck(int diffX, int diffY) {
 		// Follow mouse with duck
-		int diffX = mouse.pos.x - duck.x;
-		int diffY = mouse.pos.y - duck.y;
 		int deltaX;
 		int deltaY;
 		
@@ -67,13 +76,17 @@ public class Game extends GameWindow {
 		deltaY = Math.max(deltaY, 0 - duck.y);
 		
 		duck.incrementPos(deltaX, deltaY);
-		
-		// Check collisions
-		for (Entity bag : bags){   
-			if (bag.isCollidingWith(duck)){
-				System.out.println("eh");
-			}
+	}
+
+	private void generateBags() {
+		if (bagRand.nextInt(40) == 0) {
+			bags.add(new Entity(loader.getTexture("moneyduck.png"), 64, 64, bagRand.nextInt(screenWidth),
+					-31, randomDouble(-0.4, 0.4), randomDouble(0.6, 3)));
 		}
+	}
+
+	private double randomDouble(double min, double max) {
+		return min + (max - min) * bagRand.nextDouble();
 	}
 
 	private void updateBags() {

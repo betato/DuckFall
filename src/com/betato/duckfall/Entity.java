@@ -51,7 +51,21 @@ public class Entity {
 		halfHeight = height / 2;
 	}
 	
-	public Entity(BufferedImage texture, int width, int height, int xVelocity, int yVelocity) {
+	public Entity(BufferedImage texture, int width, int height, int x, int y) {
+		// Scale image only if necessary
+		tryScaleImage(texture, width, height);
+
+		// Record all transparent points
+		getCollisionPoints();
+		
+		// Set global variables
+		halfWidth = width / 2;
+		halfHeight = height / 2;
+		this.x = x;
+		this.y = y;
+	}
+	
+	public Entity(BufferedImage texture, int width, int height, int x, int y, double xVelocity, double yVelocity) {
 		// Scale image only if necessary
 		tryScaleImage(texture, width, height);
 
@@ -63,6 +77,8 @@ public class Entity {
 		halfHeight = height / 2;
 		this.xVelocity = xVelocity;
 		this.yVelocity = yVelocity;
+		this.x = x;
+		this.y = y;
 	}
 	
 	private void tryScaleImage(BufferedImage texture, int width, int height) {
