@@ -13,6 +13,10 @@ public class Entity {
 	public int y;
 	public int height;
 	public int width;
+	
+	public int xVelocity;
+	public int yVelocity;
+	
 	public ArrayList<Point> collisionPoints = new ArrayList<Point>();
 
 	private BufferedImage texture;
@@ -67,6 +71,25 @@ public class Entity {
 	public void setPos(Point p) {
 		x = p.x;
 		y = p.y;
+	}
+	
+	public Point getPos() {
+		return new Point(x, y);
+	}
+	
+	public void incrementPos(Point p) {
+		x =+ p.x;
+		y =+ p.y;
+	}
+	
+	public void incrementPos(int x, int y) {
+		this.x =+ x;
+		this.y =+ y;
+	}
+	
+	public void stepPos(){
+		this.x =+ xVelocity;
+		this.y =+ yVelocity;
 	}
 	
 	public boolean isCollidingWith(Entity collidingEntity){
