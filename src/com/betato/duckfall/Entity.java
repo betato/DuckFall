@@ -163,6 +163,22 @@ public class Entity {
 		return false;
 	}
 
+	public boolean collidingSemiAbstract(Entity collidingEntity) {
+		int xApart = x - collidingEntity.x;
+		int yApart = y - collidingEntity.y;
+		
+		// Check if any point is within bounds
+		for (Point collisionPoint : collisionPoints) {
+			if (collidingEntity.x <= collisionPoint.x + xApart &&
+					collisionPoint.x + xApart <= collidingEntity.x + collidingEntity.width &&
+					collidingEntity.y <= collisionPoint.y + yApart &&
+					collisionPoint.y + yApart <= collidingEntity.x + collidingEntity.height) {				
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean collidingAbstract (Entity collidingEntity) {
 		int xApart = x - collidingEntity.x;
 		int yApart = y - collidingEntity.y;

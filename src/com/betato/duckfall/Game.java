@@ -56,7 +56,7 @@ public class Game extends GameWindow {
 
 		// Check collisions
 		for (Entity bag : bags){   
-			if (bag.isCollidingWith(duck)){
+			if (duck.isCollidingWith(bag)){
 				System.out.println("eh");
 			}
 		}
@@ -118,10 +118,12 @@ public class Game extends GameWindow {
 		// Clear background
 		g.setColor(Color.white);
 		g.fillRect(0, 0, screenWidth, screenHeight);
-		//draw the background image. The position has to be at negative two, or else, there's a white border for some reason
+		// Draw the background image. The position has to be at negative two, or else, there's a white border for some reason
 		g.drawImage(background, -2, -2, null);
 		// Draw duck and bags
 		duck.draw(g);
+		g.drawString("FPS: " + fps, 10, 20);
+		g.drawString("UPS: " + ups, 10, 35);
 		for (Entity bag : bags){
 			bag.draw(g);
 		}
