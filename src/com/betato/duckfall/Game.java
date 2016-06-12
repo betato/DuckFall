@@ -12,6 +12,7 @@ import com.betato.gamedisplay.MouseStates;
 public class Game extends GameWindow {
 
 	Random rng = new Random();
+	public String TITLE = "The Game With the Duck";
 	public static final int WINDOW_WIDTH = 720;
 	public static final int WINDOW_HEIGHT = 540;
 	public int screenHeight;
@@ -27,7 +28,7 @@ public class Game extends GameWindow {
 		gameManager = new GameManager(this);
 		scene = new DuckFallScene(this);
 		scene.enter();
-		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false, false);
+		init(60, 120, TITLE, new Dimension(720, 540), false, false, false);
 	}
 
 	@Override

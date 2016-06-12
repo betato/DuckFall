@@ -24,7 +24,7 @@ public class GameManager {
 	public GameManager(Game game) {
 		highScoreServer = new HighScoreServer();
 		
-		startPanel = new InputPanel("The Game With the Duck", 600, null, new String[]{"Play", "Quit", "Highscores"}, false,
+		startPanel = new InputPanel(game.TITLE, 600, null, new String[]{"Play", "Quit", "Highscores"}, false,
 				0, new Point(45, 200), false);
 		
 		scoreboardPanel = new InputPanel("Highscores", 600, null, new String[]{"1", "2", "3", "4", "5"},
