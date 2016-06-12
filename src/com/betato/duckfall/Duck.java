@@ -14,7 +14,7 @@ public class Duck extends Entity {
 	@Override
 	public void update(KeyStates keys, MouseStates mouse) {
 		super.update(keys, mouse);
-		updateMovement(mouse.pos.x - x, mouse.pos.y - y);
+		updateMovement(mouse.pos.x - x - halfWidth, mouse.pos.y - y - halfHeight);
 	}
 	
 	private void updateMovement(int diffX, int diffY) {
