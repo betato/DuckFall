@@ -19,6 +19,7 @@ public class GameManager {
 	private Game game;
 	private HighScoreServer highScoreServer;
 	int submissionScore;
+	int scoreboardOffset;
 	
 	public GameManager(Game game) {
 		highScoreServer = new HighScoreServer();
@@ -28,13 +29,13 @@ public class GameManager {
 				0, new Point(45, 200), false);
 		
 		scoreboardPanel = new InputPanel("Highscores", 600, null, new String[]{"1", "2", "3", "4", "5"},
-				false, 0, new Point(45, 35), false);
+				false, 0, new Point(45, 45), false);
 		
 		submitScorePanel = new InputPanel("Submit Score", 600, new String[]{"Nickname"}, new String[]{"OK", "Cancel"},
 				false, 23, new Point(45, 200), false);
 		
-		scoreboardMenuPanel = new InputPanel(null, 600, null, new String[]{"<<", ">>"},
-				false, 23, new Point(45, 200), false);
+		scoreboardMenuPanel = new InputPanel(null, 600, null, new String[]{"<<", ">>", "Back"},
+				false, 23, new Point(45, 395), false);
 		
 		updateScoreboardPanel(0);
 		
@@ -119,6 +120,8 @@ public class GameManager {
 			startPanel.visible = true;
 			submitScorePanel.clearPanel();
 			submitScorePanel.selectedButton = -1;
+			break;
+			
 		case 1:
 			// Cancel
 			submitScorePanel.visible = false;
@@ -126,12 +129,38 @@ public class GameManager {
 			submitScorePanel.selectedButton = -1;
 			break;
 		}
+		
+		switch (scoreboardMenuPanel.selectedButton) {
+		case 0:
+			// Left
+			if (scoreboardOffset >= 1) {
+				scoreboardOffset -= 5;
+			}
+			updateScoreboardPanel(scoreboardOffset);
+			scoreboardMenuPanel.selectedButton = -1;
+			break;
+			
+		case 1:
+			// Right
+			scoreboardOffset += 5;
+			updateScoreboardPanel(scoreboardOffset);
+			scoreboardMenuPanel.selectedButton = -1;
+			break;
+			
+		case 2:
+			// Back
+			scoreboardMenuPanel.visible = false;
+			scoreboardPanel.visible = false;
+			startPanel.visible = true;
+			scoreboardMenuPanel.selectedButton = -1;
+			break;
+		}
 	}
 	
 	public void drawPanels(Graphics g) {
 		startPanel.drawPanel(g);
 		scoreboardPanel.drawPanel(g);
-		//scoreboardMenuPanel.drawPanel(g);
+		scoreboardMenuPanel.drawPanel(g);
 		submitScorePanel.drawPanel(g);
 	}
 }
