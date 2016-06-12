@@ -53,7 +53,7 @@ public class Game extends GameWindow {
 	}
 
 	@Override
-	public void onRender(Graphics g, int fps, int ups) {
+	public void onRender(Graphics g) {
 		// Clear background
 		g.setColor(Color.white);
 		g.fillRect(0, 0, screenWidth, screenHeight);

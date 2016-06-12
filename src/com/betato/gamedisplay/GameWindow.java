@@ -33,7 +33,7 @@ public abstract class GameWindow extends GameLoop {
 	private KeyStates keys = new KeyStates();
 	private MouseStates mouse = new MouseStates();
 	private boolean resized;
-	int fps, ups = 0;
+	protected int fps, ups = 0;
 	
 	public void init(final int fps, final int ups, String title, Dimension size, boolean resizable, boolean fullscreen, boolean hideCursor) {
 		set(fps, ups);
@@ -45,7 +45,7 @@ public abstract class GameWindow extends GameLoop {
 			@Override
 			public void paintComponent(Graphics g) {
 				// Call renderer when repainted by gameloop
-				onRender(g, fps, ups);
+				onRender(g);
 			}
 		};
 		window.add(display);
@@ -244,7 +244,7 @@ public abstract class GameWindow extends GameLoop {
 	abstract public void onUpdate(KeyStates keys, MouseStates mouse, boolean resized);
 
 	// Invoked on render
-	abstract public void onRender(Graphics g, int fps, int ups);
+	abstract public void onRender(Graphics g);
 
 	// Invoked on GameWindow exit
 	abstract public void onExit();
