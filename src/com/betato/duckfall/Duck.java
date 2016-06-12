@@ -5,6 +5,8 @@ import com.betato.gamedisplay.MouseStates;
 
 public class Duck extends Entity {
 	
+	public static final int MAX_DUCK_SPEED = 20;
+	
 	public Duck(Game game, int x, int y) {
 		super(game, game.loader.getTexture("moneyduck.png"), 64, 64, x, y);
 	}
@@ -21,10 +23,10 @@ public class Duck extends Entity {
 		int deltaY;
 				
 		// Duck speed limits
-		deltaX = Math.min(diffX, 20);
-		deltaX = Math.max(deltaX, -20);
-		deltaY = Math.min(diffY, 20);
-		deltaY = Math.max(deltaY, -20);
+		deltaX = Math.min(diffX, MAX_DUCK_SPEED);
+		deltaX = Math.max(deltaX, -MAX_DUCK_SPEED);
+		deltaY = Math.min(diffY, MAX_DUCK_SPEED);
+		deltaY = Math.max(deltaY, -MAX_DUCK_SPEED);
 				
 		// Duck screen boundaries
 		deltaX = Math.min(deltaX, game.screenWidth - x - halfWidth);

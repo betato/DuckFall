@@ -20,8 +20,6 @@ public class Game extends GameWindow {
 	public static final int WINDOW_HEIGHT = 540;
 	public int screenHeight;
 	public int screenWidth;
-	public static final int MAX_DUCK_SPEED = 20;
-	
 	private BufferedImage background;
 	
 	TextureLoader loader;
