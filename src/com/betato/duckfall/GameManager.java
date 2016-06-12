@@ -138,7 +138,13 @@ public class GameManager {
 		case 0:
 			// Left
 			if (scoreboardOffset >= 1) {
-				scoreboardOffset -= 5;
+				if (keys.keyStates[KeyStates.SHIFT]) {
+					// Jump
+					scoreboardOffset = 0;
+				} else {
+					// Increment
+					scoreboardOffset -= 5;
+				}
 			}
 			updateScoreboardPanel(scoreboardOffset);
 			scoreboardMenuPanel.selectedButton = -1;
@@ -146,6 +152,12 @@ public class GameManager {
 			
 		case 1:
 			// Right
+			if (keys.keyStates[KeyStates.SHIFT]) {
+				scoreboardOffset += 100;
+			} else {
+				// Increment
+				scoreboardOffset += 5;
+			}
 			scoreboardOffset += 5;
 			updateScoreboardPanel(scoreboardOffset);
 			scoreboardMenuPanel.selectedButton = -1;
