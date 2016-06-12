@@ -11,17 +11,16 @@ import com.betato.gamedisplay.MouseStates;
 
 public class GameManager {
 	
-	public int gameState;
-	
 	private InputPanel startPanel;
 	private InputPanel scoreboardPanel;
 	private InputPanel scoreboardMenuPanel;
 	private InputPanel submitScorePanel;
 	private InputPanel aboutPanel;
-
+	
+	private Game game;
 	private HighScoreServer highScoreServer;
 	
-	public GameManager() {
+	public GameManager(Game game) {
 		highScoreServer = new HighScoreServer();
 		//highScoreServer.submitScore("inuktishuk", 1234);
 		
@@ -35,6 +34,8 @@ public class GameManager {
 		
 		startPanel.visible = true;
 		scoreboardPanel.visible = true;
+		// Game reference to set gameState and close game
+		this.game = game;
 	}
 	
 	public static final int MAX_NAME_SIZE = 32;
@@ -78,12 +79,13 @@ public class GameManager {
 		case 0:
 			// Play
 			startPanel.visible = false;
-			gameState = 1;
+			game.gameState = 1;
+			game.setCursorVisibility(false);
 			break;
 			
 		case 1:
 			// Quit
-			gameState = 2;
+			game.exit();
 			break;
 
 		case 2:

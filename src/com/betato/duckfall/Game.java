@@ -16,18 +16,19 @@ public class Game extends GameWindow {
 	public static final int WINDOW_HEIGHT = 540;
 	public int screenHeight;
 	public int screenWidth;
+	public int gameState;
 	
 	TextureLoader loader;
-	HighScoreServer highScoreServer;
+	GameManager gameManager;
 	
 	DuckFallScene scene;
 	
 	public Game() {
 		loader = new TextureLoader();
-		highScoreServer = new HighScoreServer();
+		gameManager = new GameManager(this);
 		scene = new DuckFallScene(this);
 		scene.enter();
-		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false, true);
+		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false, false);
 	}
 
 	@Override
@@ -44,6 +45,7 @@ public class Game extends GameWindow {
 	@Override
 	public void onUpdate(KeyStates keys, MouseStates mouse, boolean resized) {
 		scene.update(keys, mouse);
+		gameManager.updatePanels(keys, mouse);
 	}
 
 	public double randomDouble(double min, double max) {
@@ -58,5 +60,6 @@ public class Game extends GameWindow {
 		scene.draw(g);
 		g.drawString("FPS: " + fps, 10, 20);
 		g.drawString("UPS: " + ups, 10, 35);
+		gameManager.drawPanels(g);
 	}
 }
