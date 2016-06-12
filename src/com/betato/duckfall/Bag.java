@@ -22,16 +22,11 @@ public class Bag extends Entity {
 	public boolean isOutOfBounds() {
 		return (x < 0 ||
 				x - halfWidth > game.screenWidth ||
-				y + halfHeight < 0 ||
+				y + halfHeight < -64 ||
 				y - halfHeight > game.screenHeight);
 	}
 	
 	private static BufferedImage getRandomBagImage() {
 		return game.loader.getTexture(bagImages[game.rng.nextInt(bagImages.length)]);
 	}
-	
-	
-	
-	
-	
 }

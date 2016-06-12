@@ -68,7 +68,7 @@ public class DuckFallScene extends Scene {
 		if (game.rng.nextInt(40) == 0) {
 			int i = game.rng.nextInt(64) + 32;
 			bags.add(new Bag(game, i, i, game.rng.nextInt(game.screenWidth),
-					-31, game.randomDouble(-0.4, 0.4), game.randomDouble(0.6, 3)));
+					-i, game.randomDouble(-0.4, 0.4), game.randomDouble(0.6, 3)));
 		}
 	}
 
