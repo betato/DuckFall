@@ -35,7 +35,7 @@ public abstract class GameWindow extends GameLoop {
 	private boolean resized;
 	int fps, ups = 0;
 	
-	public void init(int fps, int ups, String title, Dimension size, boolean resizable, boolean fullscreen, boolean hideCursor) {
+	public void init(final int fps, final int ups, String title, Dimension size, boolean resizable, boolean fullscreen, boolean hideCursor) {
 		set(fps, ups);
 		// Add components and set up window
 		window = new JFrame(title);
