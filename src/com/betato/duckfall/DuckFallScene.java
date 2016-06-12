@@ -102,7 +102,7 @@ public class DuckFallScene extends Scene {
 		score = 0;
 		bagSpeed = 1;
 		
-		duck = new Duck(game, 64, 64);
+		duck = new Duck(game, 140, 256);
 		bags = new ArrayList<>();
 	}
 	
