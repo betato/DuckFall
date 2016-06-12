@@ -14,8 +14,8 @@ import com.betato.gamedisplay.MouseStates;
 public class Game extends GameWindow {
 
 	private Entity duck;
-	private ArrayList<Entity> bags = new ArrayList<Entity>();
-	Random bagRand = new Random();
+	private ArrayList<Bag> bags = new ArrayList<Bag>();
+	Random rng = new Random();
 	public static final int WINDOW_WIDTH = 720;
 	public static final int WINDOW_HEIGHT = 540;
 	public int screenHeight;
@@ -23,8 +23,6 @@ public class Game extends GameWindow {
 	public static final int MAX_DUCK_SPEED = 20;
 	
 	private BufferedImage background;
-	
-	private String[] bagImages = {"whitebag.png", "bluebag.png", "yellowbag.png"};
 	
 	TextureLoader loader;
 	HighScoreServer highScoreServer;
@@ -51,45 +49,34 @@ public class Game extends GameWindow {
 	@Override
 	public void onUpdate(KeyStates keys, MouseStates mouse, boolean resized) {
 		generateBags();
-		updateBags();
 		duck.update(keys, mouse);
-		// Check collisions
-		for (Entity bag : bags){   
-			if (duck.isCollidingWith(bag)){
-				System.out.println("eh");
+		//we loop backwards here to handle removals
+		for (int i = bags.size() - 1; i >= 0; i--){ // from 9 to 0
+			Bag bag = bags.get(i);
+			//remove any out of bounds bags
+			if (bag.isOutOfBounds()) {
+				bags.remove(i);
 			}
-		}
+			//otherwise, update and check for collisions
+			else {
+				bag.update(keys, mouse);
+				if (bag.isCollidingWith(duck)) {
+					System.out.println("QUACK");
+				}
+			}
+		}	
 	}
 
 	private void generateBags() {
-		if (bagRand.nextInt(40) == 0) {
-			int i = bagRand.nextInt(64) + 32;
-			bags.add(new Entity(getRandomBagImage(), i, i, bagRand.nextInt(screenWidth),
+		if (rng.nextInt(40) == 0) {
+			int i = rng.nextInt(64) + 32;
+			bags.add(new Bag(this, i, i, rng.nextInt(screenWidth),
 					-31, randomDouble(-0.4, 0.4), randomDouble(0.6, 3)));
 		}
 	}
 
 	private double randomDouble(double min, double max) {
-		return min + (max - min) * bagRand.nextDouble();
-	}
-
-	private void updateBags() {
-		for (Entity bag : bags){
-			bag.stepPos();
-		}
-		// Remove bags that have left the screen
-		for (int i = bags.size() - 1; i >= 0; i--){ // from 9 to 0
-			if (bags.get(i).x < 0 ||
-					bags.get(i).x - bags.get(i).halfWidth > screenWidth ||
-					bags.get(i).y + bags.get(i).halfHeight < 0 ||
-					bags.get(i).y - bags.get(i).halfHeight > screenHeight){
-				bags.remove(i);
-			}
-		}
-	}
-	
-	private BufferedImage getRandomBagImage() {
-		return loader.getTexture(bagImages[bagRand.nextInt(bagImages.length)]);
+		return min + (max - min) * rng.nextDouble();
 	}
 
 	@Override
