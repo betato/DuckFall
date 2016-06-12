@@ -18,8 +18,8 @@ public class Game extends GameWindow {
 	Random bagRand = new Random();
 	public static final int WINDOW_WIDTH = 720;
 	public static final int WINDOW_HEIGHT = 540;
-	private int screenHeight;
-	private int screenWidth;
+	public int screenHeight;
+	public int screenWidth;
 	public static final int MAX_DUCK_SPEED = 20;
 	
 	private BufferedImage background;
