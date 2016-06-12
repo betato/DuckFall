@@ -357,7 +357,7 @@ public class InputPanel {
 		if (visible) {
 			// Draw constant frame
 			g.drawImage(box, boxLocation.x, boxLocation.y, null);
-			g.setFont(new Font("SansSerif", Font.BOLD, 18));
+			g.setFont(new Font("Monospaced", Font.BOLD, 18));
 
 			// Draw boxes
 			for (int i = 0; i < boxesDi.length; i++) {

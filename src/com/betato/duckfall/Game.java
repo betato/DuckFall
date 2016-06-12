@@ -27,19 +27,19 @@ public class Game extends GameWindow {
 	private String[] bagImages = {"whitebag.png", "bluebag.png", "yellowbag.png"};
 	
 	TextureLoader loader;
-	HighScoreServer highScoreServer;
+	GameManager gameManager;
 	
 	public Game() {
 		loader = new TextureLoader();
-		highScoreServer = new HighScoreServer();
 		background = loader.getTexture("background.png");
-		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false, true);
+		init(60, 120, "Duck Thing", new Dimension(720, 540), false, false, false);
 	}
 
 	@Override
 	public void onInit() {
 		screenHeight = getContentSize().height;
 		screenWidth = getContentSize().width;
+		gameManager = new GameManager();
 		duck = new Entity(loader.getTexture("moneyduck.png"), 64, 64);
 	}
 
@@ -50,6 +50,16 @@ public class Game extends GameWindow {
 
 	@Override
 	public void onUpdate(KeyStates keys, MouseStates mouse, boolean resized) {
+		gameManager.updatePanels(keys, mouse);
+		switch (gameManager.gameState) {
+		case 1:
+			// Start game
+			break;
+
+		case 2:
+			exit();
+			break;
+		}
 		generateBags();
 		updateBags();
 		updateDuck(mouse.pos.x - duck.x, mouse.pos.y - duck.y);
@@ -127,5 +137,6 @@ public class Game extends GameWindow {
 		for (Entity bag : bags){
 			bag.draw(g);
 		}
+		gameManager.drawPanels(g);
 	}
 }
