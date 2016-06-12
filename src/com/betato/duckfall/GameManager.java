@@ -89,8 +89,8 @@ public class GameManager {
 		case 0:
 			// Play
 			startPanel.visible = false;
-			game.gameState = 1;
-			game.scene.bags.clear();
+			game.scene.running = true;
+			game.scene.enter();
 			game.setCursorInvisible(true);
 			startPanel.selectedButton = -1;
 			break;

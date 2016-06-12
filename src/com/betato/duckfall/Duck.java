@@ -36,8 +36,4 @@ public class Duck extends Entity {
 				
 		incrementPos(deltaX, deltaY);
 	}
-	
-	
-	
-	
 }

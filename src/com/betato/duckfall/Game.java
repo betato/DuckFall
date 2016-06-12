@@ -16,7 +16,6 @@ public class Game extends GameWindow {
 	public static final int WINDOW_HEIGHT = 540;
 	public int screenHeight;
 	public int screenWidth;
-	public int gameState;
 	
 	TextureLoader loader;
 	GameManager gameManager;
@@ -52,9 +51,8 @@ public class Game extends GameWindow {
 		return min + (max - min) * rng.nextDouble();
 	}
 
-	public void setScore() {
+	public void endGame() {
 		setCursorInvisible(false);
-		gameState = 0;
 		gameManager.submitScorePanel.visible = true;
 		gameManager.submissionScore = (int) scene.score;
 	}

@@ -11,6 +11,7 @@ public class DuckFallScene extends Scene {
 	Duck duck;
 	ArrayList<Bag> bags;
 	
+	boolean running;
 	int level;
 	int bagsThisLevel;
 	int bagRate;
@@ -49,13 +50,20 @@ public class DuckFallScene extends Scene {
 			else {
 				bag.update(keys, mouse);
 				// Do not check collisions if game is in menu mode
-				if (game.gameState == 1 && bag.isCollidingWith(duck)) {
-					game.setScore();
+				if (running && bag.isCollidingWith(duck)) {
+					// Stop game
+					running = false;
+					game.endGame();
+					
+					// Reset bag parameters, but not score
+					bagsThisLevel = 0;
+					bagRate = 2;
+					bagSpeed = 1;
 				}
 			}
 		}
 		// Update level and score
-		if (game.gameState == 1){
+		if (running){
 			if (bagsThisLevel >= BAGS_FOR_LEVEL_ADVANCE){
 				bagsThisLevel = 0;
 				// Don't advance level past 10
@@ -76,7 +84,7 @@ public class DuckFallScene extends Scene {
 			bag.draw(g);
 		}
 		// Draw duck and scores only if game is running
-		if (game.gameState == 1) {
+		if (running) {
 			duck.draw(g);
 			g.drawString("Score: " + String.valueOf((int)score), 600, 20);
 			g.drawString("Level: " + String.valueOf(level), 600, 40);
