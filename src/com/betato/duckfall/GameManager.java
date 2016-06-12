@@ -33,7 +33,7 @@ public class GameManager {
 		updateScoreboardPanel(0);
 		
 		startPanel.visible = true;
-		scoreboardPanel.visible = true;
+		//scoreboardPanel.visible = true;
 		// Game reference to set gameState and close game
 		this.game = game;
 	}
@@ -80,7 +80,9 @@ public class GameManager {
 			// Play
 			startPanel.visible = false;
 			game.gameState = 1;
+			game.scene.bags.clear();
 			game.setCursorInvisible(true);
+			startPanel.selectedButton = -1;
 			break;
 			
 		case 1:
@@ -90,10 +92,12 @@ public class GameManager {
 
 		case 2:
 			// High scores
+			startPanel.selectedButton = -1;
 			break;
 
 		case 3:
 			// About
+			startPanel.selectedButton = -1;
 			break;
 		}
 	}
