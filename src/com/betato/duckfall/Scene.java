@@ -4,6 +4,9 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import com.betato.gamedisplay.KeyStates;
+import com.betato.gamedisplay.MouseStates;
+
 public abstract class Scene {
 
 	Game game;
@@ -17,13 +20,7 @@ public abstract class Scene {
 	
 	public abstract void enter();		
 	public abstract void exit();
-	public abstract void update();
-	
-	public void draw(Graphics g) {
-		g.drawImage(background, 0, 0, null);
-		for (Entity entity : entities) {
-			entity.draw(g);
-		}
-	}
+	public abstract void update(KeyStates keys, MouseStates mouse);
+	public abstract void draw(Graphics g);
 	
 }
