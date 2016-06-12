@@ -7,6 +7,9 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import com.betato.gamedisplay.KeyStates;
+import com.betato.gamedisplay.MouseStates;
+
 public class Entity {
 
 	public int x;
@@ -24,8 +27,10 @@ public class Entity {
 	public ArrayList<Point> collisionPoints = new ArrayList<Point>();
 
 	private BufferedImage texture;
+	//game reference for convenience
+	protected Game game;
 	
-	public Entity(BufferedImage texture) {
+	public Entity(Game game, BufferedImage texture) {
 		// Do not scale image
 		this.texture = texture;
 		this.width = texture.getWidth();
@@ -35,11 +40,12 @@ public class Entity {
 		getCollisionPoints();
 		
 		// Set global variables
+		this.game = game;
 		halfWidth = width / 2;
 		halfHeight = height / 2;
 	}
 	
-	public Entity(BufferedImage texture, int width, int height) {
+	public Entity(Game game, BufferedImage texture, int width, int height) {
 		// Scale image only if necessary
 		tryScaleImage(texture, width, height);
 
@@ -47,11 +53,12 @@ public class Entity {
 		getCollisionPoints();
 		
 		// Set global variables
+		this.game = game;
 		halfWidth = width / 2;
 		halfHeight = height / 2;
 	}
 	
-	public Entity(BufferedImage texture, int width, int height, int x, int y) {
+	public Entity(Game game, BufferedImage texture, int width, int height, int x, int y) {
 		// Scale image only if necessary
 		tryScaleImage(texture, width, height);
 
@@ -59,13 +66,14 @@ public class Entity {
 		getCollisionPoints();
 		
 		// Set global variables
+		this.game = game;
 		halfWidth = width / 2;
 		halfHeight = height / 2;
 		this.x = x;
 		this.y = y;
 	}
 	
-	public Entity(BufferedImage texture, int width, int height, int x, int y, double xVelocity, double yVelocity) {
+	public Entity(Game game, BufferedImage texture, int width, int height, int x, int y, double xVelocity, double yVelocity) {
 		// Scale image only if necessary
 		tryScaleImage(texture, width, height);
 
@@ -73,6 +81,7 @@ public class Entity {
 		getCollisionPoints();
 		
 		// Set global variables
+		this.game = game;
 		halfWidth = width / 2;
 		halfHeight = height / 2;
 		this.xVelocity = xVelocity;
