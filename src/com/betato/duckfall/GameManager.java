@@ -23,7 +23,6 @@ public class GameManager {
 	
 	public GameManager(Game game) {
 		highScoreServer = new HighScoreServer();
-		//highScoreServer.submitScore("inuktishuk", 1234);
 		
 		startPanel = new InputPanel("The Game With the Duck", 600, null, new String[]{"Play", "Quit", "Highscores"}, false,
 				0, new Point(45, 200), false);
@@ -75,7 +74,6 @@ public class GameManager {
 		scoreboardPanel.text = formattedScores;
 	}
 
-	
 	public void updatePanels(KeyStates keys, MouseStates mouse) {
 		if (startPanel.visible){
 			startPanel.update(keys, mouse);
@@ -85,7 +83,7 @@ public class GameManager {
 		}
 		if (scoreboardMenuPanel.visible){
 			scoreboardMenuPanel.update(keys, mouse);
-		}		
+		}
 		
 		switch (startPanel.selectedButton) {
 		case 0:
@@ -105,6 +103,7 @@ public class GameManager {
 
 		case 2:
 			// High scores
+			updateScoreboardPanel(scoreboardOffset);
 			startPanel.visible = false;
 			scoreboardMenuPanel.visible = true;
 			scoreboardPanel.visible = true;
@@ -115,7 +114,12 @@ public class GameManager {
 		switch (submitScorePanel.selectedButton) {
 		case 0:
 			// OK
-			highScoreServer.submitScore(submitScorePanel.text[0], submissionScore);
+			String name = submitScorePanel.text[0].trim();
+			if (name.isEmpty()) {
+				highScoreServer.submitScore("<UNNAMED>", submissionScore);
+			} else {
+				highScoreServer.submitScore(name, submissionScore);
+			}
 			submitScorePanel.visible = false;
 			startPanel.visible = true;
 			submitScorePanel.clearPanel();
