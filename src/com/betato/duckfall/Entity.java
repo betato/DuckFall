@@ -209,4 +209,8 @@ public class Entity {
 		// Draw texture with x and y as center point
 		g.drawImage(texture, x, y, null);
 	}
+	
+	public void update(KeyStates keys, MouseStates mouse) {
+		
+	}
 }
