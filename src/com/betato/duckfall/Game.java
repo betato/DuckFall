@@ -96,7 +96,7 @@ public class Game extends GameWindow {
 		if (bagRand.nextInt(40) == 0) {
 			int i = bagRand.nextInt(64) + 32;
 			bags.add(new Entity(getRandomBagImage(), i, i, bagRand.nextInt(screenWidth),
-					-31, randomDouble(-0.4, 0.4), randomDouble(0.6, 3)));
+					-i, randomDouble(-0.4, 0.4), randomDouble(0.6, 3)));
 		}
 	}
 
@@ -112,7 +112,7 @@ public class Game extends GameWindow {
 		for (int i = bags.size() - 1; i >= 0; i--){ // from 9 to 0
 			if (bags.get(i).x < 0 ||
 					bags.get(i).x - bags.get(i).halfWidth > screenWidth ||
-					bags.get(i).y + bags.get(i).halfHeight < 0 ||
+					bags.get(i).y + bags.get(i).halfHeight < -64 ||
 					bags.get(i).y - bags.get(i).halfHeight > screenHeight){
 				bags.remove(i);
 			}
