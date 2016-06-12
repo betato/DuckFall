@@ -80,7 +80,7 @@ public class GameManager {
 			// Play
 			startPanel.visible = false;
 			game.gameState = 1;
-			game.setCursorVisibility(false);
+			game.setCursorInvisible(true);
 			break;
 			
 		case 1:

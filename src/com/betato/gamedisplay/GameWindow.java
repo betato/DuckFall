@@ -62,7 +62,7 @@ public abstract class GameWindow extends GameLoop {
 		
 		if (hideCursor) { 			
 			// Set cursor only if needed 			
-			setCursorVisibility(hideCursor); 			
+			setCursorInvisible(hideCursor); 			
 		} 
 		
 		setResizable(resizable);
@@ -73,7 +73,7 @@ public abstract class GameWindow extends GameLoop {
 		run();
 	}
 	
-	public void setCursorVisibility(boolean hideCursor){ 			
+	public void setCursorInvisible(boolean hideCursor){ 			
 		if (hideCursor) { 			
 			// Init transparent cursor image. 			
 			BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB); 			
