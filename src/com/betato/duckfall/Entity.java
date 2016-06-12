@@ -28,7 +28,7 @@ public class Entity {
 
 	private BufferedImage texture;
 	//game reference for convenience
-	protected Game game;
+	protected static Game game;
 	
 	public Entity(Game game, BufferedImage texture) {
 		// Do not scale image
