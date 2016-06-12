@@ -40,7 +40,7 @@ public class Game extends GameWindow {
 	public void onInit() {
 		screenHeight = getContentSize().height;
 		screenWidth = getContentSize().width;
-		duck = new Entity(loader.getTexture("moneyduck.png"), 64, 64);
+		duck = new Duck(this, 64, 64);
 	}
 
 	@Override
@@ -52,34 +52,13 @@ public class Game extends GameWindow {
 	public void onUpdate(KeyStates keys, MouseStates mouse, boolean resized) {
 		generateBags();
 		updateBags();
-		updateDuck(mouse.pos.x - duck.x, mouse.pos.y - duck.y);
-
+		duck.update(keys, mouse);
 		// Check collisions
 		for (Entity bag : bags){   
 			if (duck.isCollidingWith(bag)){
 				System.out.println("eh");
 			}
 		}
-	}
-
-	private void updateDuck(int diffX, int diffY) {
-		// Follow mouse with duck
-		int deltaX;
-		int deltaY;
-		
-		// Duck speed limits
-		deltaX = Math.min(diffX, 20);
-		deltaX = Math.max(deltaX, -20);
-		deltaY = Math.min(diffY, 20);
-		deltaY = Math.max(deltaY, -20);
-		
-		// Duck screen boundaries
-		deltaX = Math.min(deltaX, screenWidth - duck.x - duck.halfWidth);
-		deltaX = Math.max(deltaX, 0 - duck.x - duck.halfWidth);
-		deltaY = Math.min(deltaY, screenHeight - duck.y - duck.halfHeight);
-		deltaY = Math.max(deltaY, 0 - duck.y - duck.halfHeight);
-		
-		duck.incrementPos(deltaX, deltaY);
 	}
 
 	private void generateBags() {
