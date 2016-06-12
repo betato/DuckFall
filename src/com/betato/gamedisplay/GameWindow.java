@@ -24,28 +24,35 @@ import javax.swing.JPanel;
 
 public abstract class GameWindow extends GameLoop {
 
+	// Window
 	private JFrame window;
 	private JPanel display;
 	private Dimension lastSize;
 
+	// GameWindow status
 	private KeyStates keys = new KeyStates();
 	private MouseStates mouse = new MouseStates();
 	private boolean resized;
-
+	int fps, ups = 0;
+	
 	public void init(int fps, int ups, String title, Dimension size, boolean resizable, boolean fullscreen, boolean hideCursor) {
 		set(fps, ups);
+		// Add components and set up window
 		window = new JFrame(title);
 		display = new JPanel() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void paintComponent(Graphics g) {
-				onRender(g);
+				// Call renderer when repainted by gameloop
+				onRender(g, fps, ups);
 			}
 		};
 		window.add(display);
 		window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		lastSize = size;
+		
+		// Set specified parameters
 		if (fullscreen) {
 			window.setUndecorated(fullscreen);
 			window.setExtendedState(window.getExtendedState() | JFrame.MAXIMIZED_BOTH);
@@ -53,67 +60,79 @@ public abstract class GameWindow extends GameLoop {
 			window.setSize(size);
 		}
 		
-		if (hideCursor) {
-			// Set cursor only if needed
-			setCursorVisibility(hideCursor);
-		}
+		if (hideCursor) { 			
+			// Set cursor only if needed 			
+			setCursorVisibility(hideCursor); 			
+		} 
 		
 		setResizable(resizable);
 		initListeners();
+		
+		// Show window and run gameloop
 		window.setVisible(true);
 		run();
 	}
 	
-	public void setCursorVisibility(boolean hideCursor){
-		if (hideCursor) {
-			// Init transparent cursor image.
-			BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-			// Create a new blank cursor.
-			Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
-			    cursorImg, new Point(0, 0), "blank cursor");
+	public void setCursorVisibility(boolean hideCursor){ 			
+		if (hideCursor) { 			
+			// Init transparent cursor image. 			
+			BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB); 			
+			// Create a new blank cursor. 			
+			Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor( 			
+					cursorImg, new Point(0, 0), "blank cursor"); 			
 			// Set the cursor
 			window.getContentPane().setCursor(blankCursor);
-		} else {
-			// Set default cursor
-			window.getContentPane().setCursor(Cursor.getDefaultCursor());
-		}
-	}
-	
+		} else { 			
+			// Set default cursor 			
+			window.getContentPane().setCursor(Cursor.getDefaultCursor()); 			
+		} 			
+	} 
+	 
 	public void setFullscreen(boolean fullscreen) {
+		// Dispose window, as decorating window cannot be done while visible
 		window.dispose();
 		window.setUndecorated(fullscreen);
 		if (fullscreen) {
+			// Set window fullscreen
 			lastSize = getFrameSize().getSize();
 			window.setExtendedState(window.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		} else {
+			// Set window normal
 			window.setSize(lastSize);
 		}
+		// Show window again
 		window.setVisible(true);
 	}
 
+	// Set the frame resizable
 	public void setResizable(boolean resizable) {
 		window.setResizable(resizable);
 	}
-
+	
+	// Set the frame size
 	public void setFrameSize(Dimension size) {
 		window.setSize(size);
 	}
-
+	
+	// Set the content size, then pack the frame
 	public void setContentSize(Dimension size) {
 		window.getContentPane().setPreferredSize(size);
 		window.pack();
 	}
 
+	// Get inner window size
 	public Rectangle getContentSize() {
 		return display.getBounds();
 	}
 
+	// Get outer window size
 	public Rectangle getFrameSize() {
 		return window.getBounds();
 	}
 
+	// Exit GameWindow
 	public void exit() {
-		// Halt gameloop
+		// Halt GameLoop
 		stop();
 		// Call the exit stuff
 		onExit();
@@ -121,7 +140,9 @@ public abstract class GameWindow extends GameLoop {
 		System.exit(0);
 	}
 	
+	// Initialize all listeners
 	private void initListeners() {
+		// All listeners are used to keep track of key and mouse states
 		window.addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
@@ -141,24 +162,24 @@ public abstract class GameWindow extends GameLoop {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				mouse.buttons[e.getButton()] = true;
+				mouse.buttonStates[e.getButton()] = true;
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				mouse.buttons[e.getButton()] = false;
+				mouse.buttonStates[e.getButton()] = false;
 			}
 		});
 
 		window.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				keys.keystates[e.getKeyCode()] = true;
+				keys.keyStates[e.getKeyCode()] = true;
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				keys.keystates[e.getKeyCode()] = false;
+				keys.keyStates[e.getKeyCode()] = false;
 			}
 
 			@Override
@@ -180,37 +201,51 @@ public abstract class GameWindow extends GameLoop {
 		});
 	}
 
+	// Called by GameLoop once after starting
 	@Override
 	public void init() {
+		// Call GameWindow init
 		onInit();
 	}
 
+	// Called by GameLoop n times every second
 	@Override
 	public void update() {
 		// Get mouse position
 		Point windowPos = MouseInfo.getPointerInfo().getLocation();
 		mouse.pos = new Point((int) (windowPos.x - display.getLocationOnScreen().getX()),
 				(int) (windowPos.y - display.getLocationOnScreen().getY()));
+		// Call update
 		onUpdate(keys, mouse, resized);
 		resized = false;
+		// Update key and mouse events
+		keys.update();
+		mouse.update();
 	}
-
+  
+	// Called by GameLoop n times every second
 	@Override
 	public void render() {
 		display.repaint();
 	}
 
+	// Called by GameLoop to display fps and ups every second
 	@Override
 	public void displayFps(int fps, int ups) {
-		System.out.println("Fps: " + fps);
-		System.out.println("Ups: " + ups);
+		// Store fps to be passed in onRender method
+		this.fps = fps;
+		this.ups = ups;
 	}
 
+	// Invoked on initialization
 	abstract public void onInit();
 
+	// Invoked on update
 	abstract public void onUpdate(KeyStates keys, MouseStates mouse, boolean resized);
 
-	abstract public void onRender(Graphics g);
+	// Invoked on render
+	abstract public void onRender(Graphics g, int fps, int ups);
 
+	// Invoked on GameWindow exit
 	abstract public void onExit();
 }

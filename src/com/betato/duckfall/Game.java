@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 import com.betato.gamedisplay.GameWindow;
@@ -115,7 +114,7 @@ public class Game extends GameWindow {
 	}
 
 	@Override
-	public void onRender(Graphics g) {
+	public void onRender(Graphics g, int fps, int ups) {
 		// Clear background
 		g.setColor(Color.white);
 		g.fillRect(0, 0, screenWidth, screenHeight);
