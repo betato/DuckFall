@@ -11,11 +11,11 @@ public class DuckFallScene extends Scene {
 	Duck duck;
 	ArrayList<Bag> bags;
 	
-	int level = 1;
+	int level;
 	int bagsThisLevel;
-	int bagRate = 2;
+	int bagRate;
 	double score;
-	double bagSpeed = 1;
+	double bagSpeed;
 	public static final int BAGS_FOR_LEVEL_ADVANCE = 60;
 	
 	public DuckFallScene(Game game) {
@@ -50,39 +50,50 @@ public class DuckFallScene extends Scene {
 				bag.update(keys, mouse);
 				// Do not check collisions if game is in menu mode
 				if (game.gameState == 1 && bag.isCollidingWith(duck)) {
-					System.out.println("QUACK");
+					game.setScore();
 				}
 			}
 		}
 		// Update level and score
-		if (bagsThisLevel >= BAGS_FOR_LEVEL_ADVANCE){
-			bagsThisLevel = 0;
-			// Don't advance level past 10
-			if (level < 10){
-				bagRate++;
-				bagSpeed++;
-				level++;
+		if (game.gameState == 1){
+			if (bagsThisLevel >= BAGS_FOR_LEVEL_ADVANCE){
+				bagsThisLevel = 0;
+				// Don't advance level past 10
+				if (level < 10){
+					bagRate++;
+					bagSpeed++;
+					level++;
+				}
 			}
+			score += 0.002 * (level * 2 + 4);
 		}
-		System.out.println(bagRate);
-		System.out.println(level);
-		System.out.println(score);
-		score += 0.002 * (level + 4);
 	}
 
 	@Override
 	public void draw(Graphics g) {
 		g.drawImage(background, -2, -2, null);
-		// Draw duck only if game is running
-		if (game.gameState == 1) {
-			duck.draw(g);
-		}
 		for (Bag bag : bags) {
 			bag.draw(g);
+		}
+		// Draw duck and scores only if game is running
+		if (game.gameState == 1) {
+			duck.draw(g);
+			g.drawString("Score: " + String.valueOf((int)score), 600, 20);
+			g.drawString("Level: " + String.valueOf(level), 600, 40);
+		} else {
+			g.drawString("Last Score: " + String.valueOf((int)score), 600, 20);
+			g.drawString("Last Level: " + String.valueOf(level), 600, 40);
 		}
 	}
 	
 	private void startGame() {
+		// Clear game
+		level = 1;
+		bagsThisLevel = 0;
+		bagRate = 2;
+		score = 0;
+		bagSpeed = 1;
+		
 		duck = new Duck(game, 64, 64);
 		bags = new ArrayList<>();
 	}
@@ -95,6 +106,4 @@ public class DuckFallScene extends Scene {
 					-i, game.randomDouble(-0.4, 0.4), game.randomDouble(0.5 + bagSpeed / 2, 1 + bagSpeed)));
 		}
 	}
-
-
 }

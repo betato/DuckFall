@@ -52,6 +52,13 @@ public class Game extends GameWindow {
 		return min + (max - min) * rng.nextDouble();
 	}
 
+	public void setScore() {
+		setCursorInvisible(false);
+		gameState = 0;
+		gameManager.submitScorePanel.visible = true;
+		gameManager.submissionScore = (int) scene.score;
+	}
+	
 	@Override
 	public void onRender(Graphics g) {
 		// Clear background

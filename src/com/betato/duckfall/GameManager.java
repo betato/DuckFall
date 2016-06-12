@@ -11,24 +11,30 @@ import com.betato.gamedisplay.MouseStates;
 
 public class GameManager {
 	
-	private InputPanel startPanel;
-	private InputPanel scoreboardPanel;
-	private InputPanel scoreboardMenuPanel;
-	private InputPanel submitScorePanel;
-	private InputPanel aboutPanel;
+	InputPanel startPanel;
+	InputPanel scoreboardPanel;
+	InputPanel scoreboardMenuPanel;
+	InputPanel submitScorePanel;
 	
 	private Game game;
 	private HighScoreServer highScoreServer;
+	int submissionScore;
 	
 	public GameManager(Game game) {
 		highScoreServer = new HighScoreServer();
 		//highScoreServer.submitScore("inuktishuk", 1234);
 		
-		startPanel = new InputPanel("The Game With the Duck", 600, null, new String[]{"Play", "Quit", "Highscores", "About"}, false,
+		startPanel = new InputPanel("The Game With the Duck", 600, null, new String[]{"Play", "Quit", "Highscores"}, false,
 				0, new Point(45, 200), false);
 		
 		scoreboardPanel = new InputPanel("Highscores", 600, null, new String[]{"1", "2", "3", "4", "5"},
 				false, 0, new Point(45, 35), false);
+		
+		submitScorePanel = new InputPanel("Submit Score", 600, new String[]{"Nickname"}, new String[]{"OK", "Cancel"},
+				false, 23, new Point(45, 200), false);
+		
+		scoreboardMenuPanel = new InputPanel(null, 600, null, new String[]{"<<", ">>"},
+				false, 23, new Point(45, 200), false);
 		
 		updateScoreboardPanel(0);
 		
@@ -70,10 +76,15 @@ public class GameManager {
 
 	
 	public void updatePanels(KeyStates keys, MouseStates mouse) {
-		startPanel.update(keys, mouse);
-		//scoreboardMenuPanel.update(keys, mouse);
-		//submitScorePanel.update(keys, mouse);
-		//aboutPanel.update(keys, mouse);
+		if (startPanel.visible){
+			startPanel.update(keys, mouse);
+		}
+		if (submitScorePanel.visible){
+			submitScorePanel.update(keys, mouse);
+		}
+		if (scoreboardMenuPanel.visible){
+			scoreboardMenuPanel.update(keys, mouse);
+		}		
 		
 		switch (startPanel.selectedButton) {
 		case 0:
@@ -87,17 +98,32 @@ public class GameManager {
 			
 		case 1:
 			// Quit
+			startPanel.selectedButton = -1;
 			game.exit();
 			break;
 
 		case 2:
 			// High scores
+			startPanel.visible = false;
+			scoreboardMenuPanel.visible = true;
+			scoreboardPanel.visible = true;
 			startPanel.selectedButton = -1;
 			break;
-
-		case 3:
-			// About
-			startPanel.selectedButton = -1;
+		}
+		
+		switch (submitScorePanel.selectedButton) {
+		case 0:
+			// OK
+			highScoreServer.submitScore(submitScorePanel.text[0], submissionScore);
+			submitScorePanel.visible = false;
+			startPanel.visible = true;
+			submitScorePanel.clearPanel();
+			submitScorePanel.selectedButton = -1;
+		case 1:
+			// Cancel
+			submitScorePanel.visible = false;
+			startPanel.visible = true;
+			submitScorePanel.selectedButton = -1;
 			break;
 		}
 	}
@@ -106,7 +132,6 @@ public class GameManager {
 		startPanel.drawPanel(g);
 		scoreboardPanel.drawPanel(g);
 		//scoreboardMenuPanel.drawPanel(g);
-		//submitScorePanel.drawPanel(g);
-		//aboutPanel.drawPanel(g);
+		submitScorePanel.drawPanel(g);
 	}
 }
