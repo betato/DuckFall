@@ -12,7 +12,7 @@ import com.betato.gamedisplay.MouseStates;
 public class Game extends GameWindow {
 
 	Random rng = new Random();
-	public String TITLE = "The Game With the Duck";
+	public String TITLE = "A Good Day To Duck Hard";
 	public static final int WINDOW_WIDTH = 720;
 	public static final int WINDOW_HEIGHT = 540;
 	public int screenHeight;
