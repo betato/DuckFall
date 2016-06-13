@@ -109,7 +109,7 @@ public class DuckFallScene extends Scene {
 	private void generateBags() {
 		if (game.rng.nextInt(100) < bagRate) {
 			bagsThisLevel++;
-			int i = game.rng.nextInt(64) + 32;
+			int i = game.rng.nextInt(50) + 26;
 			bags.add(new Bag(game, i, i, game.rng.nextInt(game.screenWidth),
 					-i, game.randomDouble(-0.4, 0.4), game.randomDouble(0.5 + bagSpeed / 2, 1 + bagSpeed)));
 		}

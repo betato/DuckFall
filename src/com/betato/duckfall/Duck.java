@@ -1,8 +1,6 @@
 package com.betato.duckfall;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 
 import com.betato.gamedisplay.KeyStates;
 import com.betato.gamedisplay.MouseStates;
