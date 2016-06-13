@@ -1,5 +1,6 @@
 package com.betato.duckfall;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.betato.gamedisplay.KeyStates;
@@ -17,6 +18,11 @@ public class Bag extends Entity {
 	public void update(KeyStates keys, MouseStates mouse) {
 		super.update(keys, mouse);
 		stepPos();
+	}
+	
+	@Override
+	public void draw(Graphics g) {
+		super.draw(g);
 	}
 	
 	public boolean isOutOfBounds() {

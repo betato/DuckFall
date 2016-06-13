@@ -167,26 +167,29 @@ public class Entity {
 		// Check collision with axis-aligned bounding box first
 		if (collidingAABB(collidingEntity)) {
 			// If outer boxes are colliding, check individual points
-			return collidingAbstract(collidingEntity);
+			return collidingSemiAbstract(collidingEntity);
 		}
 		return false;
 	}
 
 	public boolean collidingSemiAbstract(Entity collidingEntity) {
-		int xApart = x - collidingEntity.x;
-		int yApart = y - collidingEntity.y;
-		
-		// Check if any point is within bounds
-		for (Point collisionPoint : collisionPoints) {
-			if (collidingEntity.x <= collisionPoint.x + xApart &&
-					collisionPoint.x + xApart <= collidingEntity.x + collidingEntity.width &&
-					collidingEntity.y <= collisionPoint.y + yApart &&
-					collisionPoint.y + yApart <= collidingEntity.x + collidingEntity.height) {				
+		int collisionPointSize = collidingEntity.collisionPoints.size();
+		for (int i = 0; i < collisionPointSize; i++) {
+			// Check if any point is in rectangle
+			if (contains(collidingEntity.collisionPoints.get(i).x + collidingEntity.x, 
+					collidingEntity.collisionPoints.get(i).y + collidingEntity.y)){
 				return true;
 			}
 		}
 		return false;
 	}
+	
+	public boolean contains(int px, int py){
+        return (x < px &&
+        		y < py &&
+                x + width > px  &&
+                y + height > py);
+    }
 
 	public boolean collidingAbstract (Entity collidingEntity) {
 		int xApart = x - collidingEntity.x;

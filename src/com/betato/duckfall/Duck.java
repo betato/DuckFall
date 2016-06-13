@@ -1,5 +1,9 @@
 package com.betato.duckfall;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
+
 import com.betato.gamedisplay.KeyStates;
 import com.betato.gamedisplay.MouseStates;
 
@@ -35,5 +39,10 @@ public class Duck extends Entity {
 		deltaY = Math.max(deltaY, 0 - y - halfHeight);
 				
 		incrementPos(deltaX, deltaY);
+	}
+	
+	@Override
+	public void draw(Graphics g) {
+		super.draw(g);
 	}
 }
