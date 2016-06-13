@@ -158,7 +158,6 @@ public class GameManager {
 				// Increment
 				scoreboardOffset += 5;
 			}
-			scoreboardOffset += 5;
 			updateScoreboardPanel(scoreboardOffset);
 			scoreboardMenuPanel.selectedButton = -1;
 			break;
